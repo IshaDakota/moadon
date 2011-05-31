@@ -1,0 +1,108 @@
+/**
+ * @file
+ * Navigation Styling
+ */
+
+
+/*
+ * The active item in a Drupal menu
+ */
+li a.active {
+  color: #000;
+}
+
+/*
+ * Navigation bar
+ */
+#navigation {
+  /* overflow: hidden; /* Sometimes you want to prevent overlapping with main div. */
+}
+
+#navigation ul.links, /* Main menu and secondary menu links */
+#navigation .content ul /* Menu block links */ {
+  margin: 0;
+  padding: 0;
+  text-align: left; /* LTR */
+}
+
+#navigation ul.links li, /* A simple method to get navigation links to appear in one line. */
+#navigation .content li {
+  float: left; /* LTR */
+  padding: 0 10px 0 0; /* LTR */
+}
+
+.region-navigation {
+}
+
+/*
+ * Main menu and Secondary menu links
+ */
+#main-menu {
+}
+
+#secondary-menu {
+  float: right;
+}
+
+/*
+ * Menu blocks
+ */
+.block-menu {
+}
+
+/*
+ * "Menu block" blocks
+ *
+ * Drupal core has limited ways in which it can display its menus. To get around
+ * these limitations, see http://drupal.org/project/menu_block
+ */
+.block-menu-block {
+}
+#block-menu-block-1 {
+  margin: 55px 0 0;
+  padding: 10px 0 0;
+}
+
+
+#block-menu-block-1 .content ul.leaf {
+;
+}
+
+#block-menu-block-1 .content ul li.leaf,
+#block-menu-block-1 .content ul li.collapsed,
+#block-menu-block-1 .content ul li.expanded {
+  list-style-image:none;
+  font-size: 1.3em;
+  list-style:none;
+  text-align:right;
+  margin: 10px 0 0;
+  font-weight:800;
+}
+
+#block-menu-block-1 .content ul li a,
+#block-menu-block-1 .content ul li a:visited {
+  text-decoration: none;
+  color: #2C4062;
+}
+
+#block-menu-block-1 .content ul li a:focus,
+#block-menu-block-1 .content ul li a:hover {
+  text-decoration: none;
+  color: #ECBA09;
+}
+
+#block-menu-block-1 .content ul li a.active{
+  text-decoration: none;
+  color: #ECBA09;
+}
+
+#block-menu-block-1 .content ul ul li.leaf,
+#block-menu-block-1 .content ul ul li.collapsed,
+#block-menu-block-1 .content ul ul li.expanded {
+  list-style-image:none;
+  font-size: .75em;
+  list-style:none;
+  text-align:right;
+  margin: 0;
+  font-weight:800;
+}
