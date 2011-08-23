@@ -136,11 +136,13 @@ h2.block-title /* Block title */ {
 }
 
 #block-views-1e18ccc2df7936f5acdb42faee7a2288 .content .view-footer p {
-  margin: 20px 0 0;
+  margin: 10px 0 0;
   text-align: right;
 }
+#block-views-1e18ccc2df7936f5acdb42faee7a2288 .content{
+  padding: 0 20px 20px 20px;  
+}
 
-#block-views-1e18ccc2df7936f5acdb42faee7a2288 .content,
 #block-block-3 .content {
   padding:  10px 20px 20px 20px;
 }
