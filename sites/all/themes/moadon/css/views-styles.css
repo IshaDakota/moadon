@@ -4,3 +4,12 @@
  */
 
 
+.view-newsletter .field-name-field-photos .field-item {
+    float: left;
+    margin: 2px;
+}
+
+.view-newsletter .field-name-field-photos .field-items {
+    clear: both;
+    display: inline-block;
+}
