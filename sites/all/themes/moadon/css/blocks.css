@@ -111,8 +111,8 @@ h2.block-title /* Block title */ {
 #block-block-3 {
   background: #2C4062;
   color: #ECBA09;
-  margin: 0 5px 20px 0;
-  width: 400px;
+  margin: 0 10px 20px 0;
+  width: 350px;
   height: 200px;
   float:left;
   border-radius: 15px 15px 15px 15px;
@@ -124,8 +124,8 @@ h2.block-title /* Block title */ {
 
 #block-views-1e18ccc2df7936f5acdb42faee7a2288 {
   border: 2px solid #2C4062;
-  margin: 0 0 20px 5px;
-  width: 325px;
+  margin: 0 0px 20px 0;
+  width: 370px;
   height: 196px;
   float:left;
   border-radius: 15px 15px 15px 15px;
@@ -155,4 +155,29 @@ h2.block-title /* Block title */ {
 #block-views-1e18ccc2df7936f5acdb42faee7a2288 h2,
 #block-block-3 h2 {
   padding:  20px 20px 5px 20px;
+}
+
+#block-block-5 {
+  border: 2px solid #2C4062;
+  margin: 0 5px 20px 0;
+  width: 730px;
+  height: auto;
+  float:left;
+  clear: both;
+  border-radius: 15px 15px 15px 15px;
+  -webkit-border-radius: 15px 15px 15px 15px;
+  -moz-border-radius: 15px 15px 15px 15px;
+  behavior: url(../connections/PIE.htc);
+
+}
+#block-block-5 h2 {
+  padding:  10px 10px 5px 20px;
+}
+
+#block-block-5 .content {
+  padding:  0px 20px 20px 20px;
+}
+
+#block-block-5 .content  p {
+  font-size: 1.0em;
 }
