@@ -106,3 +106,63 @@ li a.active {
   margin: 0;
   font-weight:800;
 }
+
+/*
+ * Annual Event Menu block
+ *
+ */
+
+.block-menu-block {
+}
+
+#block-menu-menu-annual-event {
+  margin: 10px 0 0;
+  padding: 10px 0 0;
+}
+
+
+#block-menu-menu-annual-event .content ul.leaf {
+}
+
+#block-menu-menu-annual-event .content ul li.leaf,
+#block-menu-menu-annual-event .content ul li.collapsed,
+#block-menu-menu-annual-event .content ul li.expanded {
+  list-style-image:none;
+  display: inline;
+  font-size: 1.1em;
+  list-style:none;
+  text-align:right;
+  margin: 0 3px;
+  font-weight:500;
+}
+
+#block-menu-menu-annual-event .content ul li a,
+#block-menu-menu-annual-event .content ul li a:visited {
+  text-decoration: none;
+  color: #FFF;
+  background: #2C4062;
+  padding: 10px 8px;
+  border-radius: 10px 10px 10px 10px;
+}
+
+#block-menu-menu-annual-event .content ul li a:focus,
+#block-menu-menu-annual-event .content ul li a:hover {
+  text-decoration: none;
+  color: #ECBA09;
+}
+
+#block-menu-menu-annual-event .content ul li a.active{
+  text-decoration: none;
+  color: #ECBA09;
+}
+
+#block-menu-menu-annual-event .content ul ul li.leaf,
+#block-menu-menu-annual-event .content ul ul li.collapsed,
+#block-menu-menu-annual-event .content ul ul li.expanded {
+  list-style-image:none;
+  font-size: .75em;
+  list-style:none;
+  text-align:right;
+  margin: 0;
+  font-weight:800;
+}
