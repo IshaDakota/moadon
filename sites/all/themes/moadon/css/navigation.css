@@ -116,12 +116,13 @@ li a.active {
 }
 
 #block-menu-menu-annual-event {
-  margin: 10px 0 0;
+  margin: 10px 0 40px;
   padding: 10px 0 0;
 }
 
 
-#block-menu-menu-annual-event .content ul.leaf {
+#block-menu-menu-annual-event .content ul.menu{
+  text-align: center;
 }
 
 #block-menu-menu-annual-event .content ul li.leaf,
