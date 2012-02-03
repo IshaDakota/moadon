@@ -152,7 +152,7 @@
  *   }
  *
  *   // $txn goes out of scope here.  Unless the transaction was rolled back, it
- *   // gets automatically committed here.
+ *   // gets automatically commited here.
  * }
  *
  * function my_other_function($id) {
@@ -1899,19 +1899,21 @@ class DatabaseTransaction {
 }
 
 /**
- * Represents a prepared statement.
+ * A prepared statement.
  *
- * Some methods in that class are purposefully commented out. Due to a change in
+ * Some methods in that class are purposely commented out. Due to a change in
  * how PHP defines PDOStatement, we can't define a signature for those methods
  * that will work the same way between versions older than 5.2.6 and later
- * versions.  See http://bugs.php.net/bug.php?id=42452 for more details.
+ * versions.
+ *
+ * Please refer to http://bugs.php.net/bug.php?id=42452 for more details.
  *
  * Child implementations should either extend PDOStatement:
  * @code
  * class DatabaseStatement_oracle extends PDOStatement implements DatabaseStatementInterface {}
  * @endcode
- * or define their own class. If defining their own class, they will also have
- * to implement either the Iterator or IteratorAggregate interface before
+ * or implement their own class, but in that case they will also have to
+ * implement the Iterator or IteratorArray interfaces before
  * DatabaseStatementInterface:
  * @code
  * class DatabaseStatement_oracle implements Iterator, DatabaseStatementInterface {}
@@ -1995,7 +1997,7 @@ interface DatabaseStatementInterface extends Traversable {
    *   The numeric index of the field to return. Defaults to the first field.
    *
    * @return
-   *   A single field from the next record, or FALSE if there is no next record.
+   *   A single field from the next record.
    */
   public function fetchField($index = 0);
 
@@ -2015,7 +2017,7 @@ interface DatabaseStatementInterface extends Traversable {
    * helper method, so one is added.
    *
    * @return
-   *   An associative array, or FALSE if there is no next row.
+   *   An associative array.
    */
   public function fetchAssoc();
 
@@ -2043,7 +2045,7 @@ interface DatabaseStatementInterface extends Traversable {
    *   The index of the column number to fetch.
    *
    * @return
-   *   An indexed array, or an empty array if there is no result set.
+   *   An indexed array.
    */
   public function fetchCol($index = 0);
 
@@ -2063,7 +2065,7 @@ interface DatabaseStatementInterface extends Traversable {
    *   The numeric index of the field to use as the array value.
    *
    * @return
-   *   An associative array, or an empty array if there is no result set.
+   *   An associative array.
    */
   public function fetchAllKeyed($key_index = 0, $value_index = 1);
 
@@ -2082,7 +2084,7 @@ interface DatabaseStatementInterface extends Traversable {
    *   set for the query will be used.
    *
    * @return
-   *   An associative array, or an empty array if there is no result set.
+   *   An associative array.
    */
   public function fetchAllAssoc($key, $fetch = NULL);
 }

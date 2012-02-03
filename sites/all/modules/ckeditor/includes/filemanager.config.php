@@ -6,7 +6,7 @@
  *
  * == BEGIN LICENSE ==
  *
- * Licensed under the terms of any of the following licenses of your
+ * Licensed under the terms of any of the following licenses at your
  * choice:
  *
  *  - GNU General Public License Version 2 or later (the "GPL")
@@ -23,8 +23,7 @@
  * @file
  * CKEditor Module for Drupal 7.x
  *
- * This file is required by the CKEeditor module if you want to enable CKFinder,
- * an advanced Ajax file browser.
+ * This file is required by CKEeditor module if you want to enable CKFinder ajax file browser
  *
  */
 

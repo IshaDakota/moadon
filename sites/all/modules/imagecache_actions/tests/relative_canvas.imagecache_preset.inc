@@ -10,13 +10,13 @@
  */
 
 $presets['relative_canvas'] = array (
-  'name' => 'relative_canvas',
+  'presetname' => 'relative_canvas',
   '#weight' => 2.0,
-  'effects' => array (
+  'actions' => array (
     0 => array (
       'weight' => '0',
       'module' => 'imagecache_canvasactions',
-      'name' => 'canvasactions_definecanvas',
+      'action' => 'canvasactions_definecanvas',
       'data' => array (
         'RGB' => array (
           'HEX' => '333333',

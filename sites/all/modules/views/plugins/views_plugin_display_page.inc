@@ -28,7 +28,6 @@ class views_plugin_display_page extends views_plugin_display {
         'description' => array('default' => '', 'translatable' => FALSE),
         'weight' => array('default' => 0),
         'name' => array('default' => variable_get('menu_default_node_menu', 'navigation')),
-        'context' => array('default' => ''),
        ),
     );
     $options['tab_options'] = array(
@@ -149,12 +148,6 @@ class views_plugin_display_page extends views_plugin_display {
           break;
       }
 
-      // Add context for contextual links.
-      // @see menu_contextual_links()
-      if (!empty($menu['context'])) {
-        $items[$path]['context'] = MENU_CONTEXT_INLINE;
-      }
-
       // If this is a 'default' tab, check to see if we have to create teh
       // parent menu item.
       if ($menu['type'] == 'default tab') {
@@ -174,7 +167,7 @@ class views_plugin_display_page extends views_plugin_display {
               'page arguments' => $page_arguments,
               // Default access check (per display)
               'access callback' => 'views_access',
-              'access arguments' => $access_arguments,
+              'access arguments' => array($access_plugin->get_access_callback()),
               // Identify URL embedded arguments and correlate them to a handler
               'load arguments'  => array($this->view->name, $this->display->id, '%index'),
               'title' => $tab_options['title'],
@@ -219,14 +212,11 @@ class views_plugin_display_page extends views_plugin_display {
 
     $this->view->get_breadcrumb(TRUE);
 
-
-    // And now render the view.
-    $render = $this->view->render();
-
-    // First execute the view so it's possible to get tokens for the title.
     // And the title, which is much easier.
     drupal_set_title(filter_xss_admin($this->view->get_title()), PASS_THROUGH);
-    return $render;
+
+    // And now render the view.
+    return $this->view->render();
   }
 
   /**
@@ -292,7 +282,6 @@ class views_plugin_display_page extends views_plugin_display {
    * Provide the default form for setting options.
    */
   function options_form(&$form, &$form_state) {
-    parent::options_form($form, $form_state);
     // It is very important to call the parent function here:
     parent::options_form($form, $form_state);
 
@@ -377,13 +366,6 @@ class views_plugin_display_page extends views_plugin_display {
           '#default_value' => isset($menu['weight']) ? $menu['weight'] : 0,
           '#description' => t('The lower the weight the higher/further left it will appear.'),
           '#dependency' => array('radio:menu[type]' => array('normal', 'tab', 'default tab')),
-        );
-        $form['menu']['context'] = array(
-          '#title' => t('Context'),
-          '#type' => 'checkbox',
-          '#default_value' => !empty($menu['context']),
-          '#description' => t('Displays the link in contextual links'),
-          '#dependency' => array('radio:menu[type]' => array('tab')),
         );
         break;
       case 'tab_options':

@@ -10,16 +10,16 @@
  */
 
 $presets['scale'] = array (
-  'name' => 'scale',
+  'presetname' => 'scale',
   '#weight' => 1.1,
-  'effects' => array (
+  'actions' => array (
     0 => array (
       'weight' => '-1',
       'module' => 'imagecache',
-      'name' => 'image_scale',
+      'action' => 'imagecache_scale',
       'data' => array (
         'width' => '100',
-        'height' => '',
+        'height' => '100%',
         'upscale' => 0,
       ),
     ),

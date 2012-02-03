@@ -1,14 +1,14 @@
 <?php
 
 /**
- * @file
- * Contains views_handler_area_text handler.
- */
+* @file
+* Views area text handler.
+*/
 
 /**
- * Views area text handler.
  * @ingroup views_area_handlers Views' area handlers
 */
+
 class views_handler_area_text extends views_handler_area {
 
   function option_definition() {
@@ -100,11 +100,10 @@ class views_handler_area_text extends views_handler_area {
    */
   function render_textarea($value, $format) {
     if ($value) {
-      if ($this->options['tokenize']) {
-        $value = $this->view->style_plugin->tokenize_value($value, 0);
-      }
+      $value = $this->view->style_plugin->tokenize_value($value, 0);
       return check_markup($value, $format, '', FALSE);
     }
   }
 
 }
+

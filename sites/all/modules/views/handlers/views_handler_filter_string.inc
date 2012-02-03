@@ -3,8 +3,6 @@
 /**
  * Basic textfield filter to handle string filtering commands
  * including equality, like, not like, etc.
- *
- * @ingroup views_filter_handlers
  */
 class views_handler_filter_string extends views_handler_filter {
   // exposed filter options
@@ -112,17 +110,6 @@ class views_handler_filter_string extends views_handler_filter {
           'method' => 'op_empty',
           'short' => t('not empty'),
           'values' => 0,
-        ),
-      );
-    }
-    // Add regexp support for MySQL.
-    if (Database::getConnection()->databaseType() == 'mysql') {
-      $operators += array(
-        'regular_expression' => array(
-          'title' => t('Regular expression'),
-          'short' => t('regex'),
-          'method' => 'op_regex',
-          'values' => 1,
         ),
       );
     }
@@ -305,10 +292,6 @@ class views_handler_filter_string extends views_handler_filter {
   function op_longer($field) {
     $placeholder = $this->placeholder();
     $this->query->add_where_expression($this->options['group'], "LENGTH($field) > $placeholder", array($placeholder => $this->value));
-  }
-
-  function op_regex($field) {
-    $this->query->add_where($this->options['group'], $field, $this->value, 'RLIKE');
   }
 
   function op_empty($field) {

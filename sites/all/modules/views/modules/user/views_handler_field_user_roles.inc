@@ -1,8 +1,6 @@
 <?php
 /**
  * Field handler to provide a list of roles.
- *
- * @ingroup views_field_handlers
  */
 class views_handler_field_user_roles extends views_handler_field_prerender_list {
   function construct() {
@@ -20,7 +18,7 @@ class views_handler_field_user_roles extends views_handler_field_prerender_list 
     $this->items = array();
 
     foreach ($values as $result) {
-      $uids[] = $this->get_value($result, NULL, TRUE);
+      $uids[] = $this->get_value($result);
     }
 
     if ($uids) {

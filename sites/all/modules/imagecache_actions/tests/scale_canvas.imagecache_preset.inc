@@ -10,14 +10,14 @@
  */
 
 $presets['scale_canvas'] = array (
-  'name' => 'scale_canvas',
+  'presetname' => 'scale_canvas',
   '#weight' => 2.1,
 
-  'effects' => array (
+  'actions' => array (
     1 => array (
       'weight' => '1',
       'module' => 'imagecache',
-      'name' => 'image_scale',
+      'action' => 'imagecache_scale',
       'data' => array (
         'width' => '100',
         'height' => '150',
@@ -27,7 +27,7 @@ $presets['scale_canvas'] = array (
     2 => array (
       'weight' => '2',
       'module' => 'imagecache_canvasactions',
-      'name' => 'canvasactions_definecanvas',
+      'action' => 'canvasactions_definecanvas',
       'data' => array (
         'RGB' => array (
           'HEX' => 'DDDDDD',

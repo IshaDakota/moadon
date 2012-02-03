@@ -10,7 +10,7 @@
  */
 
 $presets['default'] = array (
-  'name' => 'default',
+  'presetname' => 'default',
   '#weight' => -1,
-  'effects' => array(),
+  'actions' => array(),
 );
