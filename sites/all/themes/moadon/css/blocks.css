@@ -181,3 +181,9 @@ h2.block-title /* Block title */ {
 #block-block-5 .content  p {
   font-size: 1.0em;
 }
+
+.region-bottom #block-block-6 .content {
+  text-align: center;
+  font-size: .7em;
+  color: #7A7A7A;
+}
