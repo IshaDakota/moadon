@@ -60,6 +60,9 @@ module. Currently no such features are implemented, but they might be in the
 future, think e.g. of adding a "copy image style" feature. This allows to test
 D8 image module features in real life.
 
+Solving errors in the core image handling:
+- [#1554074]: scale does not work with imagemagick when dimensions are unknown?
+
 
 Which toolkit to use?
 ---------------------
@@ -140,3 +143,5 @@ well).
 - Underlay/overlay: keywords in the x and y offset fields do not work.
 - Underlay does still display a message about Iamgemagick not being supported.
 - Brightness values outside the -250 .. 250 range are accepted.
+- Check colorfields that allow a transparency component or allow to be empty to
+  specify fully tranparent.
