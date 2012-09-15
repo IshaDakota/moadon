@@ -1,0 +1,156 @@
+diff --git a/media_gallery.admin.inc b/media_gallery.admin.inc
+index c06797f..89fc912 100644
+--- a/media_gallery.admin.inc
++++ b/media_gallery.admin.inc
+@@ -1,12 +1,26 @@
+ <?php
+ 
+ /**
+- * The Galleries settings page will just return the term edit form for the "all galleries" tid.
+- *
++ * Configure page for the media gallery settings.
+  */
+ function media_gallery_admin_settings() {
+-  $edit = media_gallery_get_default_gallery_collection();
+-  $form_state['build_info']['args'] = array($edit);
+-  form_load_include($form_state, 'inc', 'taxonomy', 'taxonomy.admin');
+-  return drupal_build_form('taxonomy_form_term', $form_state);
++  $form['media_gallery_use_multiple_collections'] = array(
++    '#type' => 'checkbox',
++    '#title' => t('Use multiple gallery collections.'),
++    '#default_value' => variable_get('media_gallery_use_multiple_collections', FALSE),
++    '#description' => t('Enables the creation of multiple <em>gallery collections</em> and <em>hierarchical galleries</em>.'),
++  );
++  // Show a link to the media gallery taxonomy terms.
++  if (variable_get('media_gallery_use_multiple_collections', FALSE)) {
++    $vocabulary = taxonomy_vocabulary_load(variable_get('media_gallery_collection_vid'));
++    if ($vocabulary) {
++      $form['media_gallery_gallery_collection_taxonomy'] = array(
++        '#type' => 'link',
++        '#title' => t('Configure gallery collections'),
++        '#href' => "admin/structure/taxonomy/$vocabulary->machine_name",
++        '#access' => user_access('administer taxonomy'),
++      );
++    }
++  }
++  return system_settings_form($form);
+ }
+diff --git a/media_gallery.install b/media_gallery.install
+index dce80b4..baef4e7 100644
+--- a/media_gallery.install
++++ b/media_gallery.install
+@@ -968,6 +968,7 @@ function media_gallery_uninstall() {
+   variable_del('comment_media_gallery');
+   variable_del('media_gallery_collection_vid');
+   variable_del('media_gallery_default_collection_tid');
++  variable_del('media_gallery_use_multiple_collections');
+ }
+ 
+ /**
+diff --git a/media_gallery.module b/media_gallery.module
+index 70f3932..92d2d85 100644
+--- a/media_gallery.module
++++ b/media_gallery.module
+@@ -37,9 +37,11 @@ function media_gallery_file_view_modes() {
+ function media_gallery_menu() {
+   $items['admin/config/media/galleries'] = array(
+     'title' => 'Gallery settings',
+-    'description' => 'Configure settings for the "All galleries" page.',
++    'description' => 'Configure settings for the Media Gallery module.',
++    'page callback' => 'drupal_get_form',
++    'page arguments' => array('media_gallery_admin_settings'),
+     'access arguments' => array('administer media galleries'),
+-    'page callback' => 'media_gallery_admin_settings',
++    'type' => MENU_NORMAL_ITEM,
+     'file' => 'media_gallery.admin.inc',
+   );
+   $items['media-gallery/sort/collection/%taxonomy_term/%'] = array(
+@@ -191,8 +193,7 @@ function media_gallery_menu_local_tasks_alter(&$data, $router_item, $root_path)
+     $tabs = &$data['tabs'][0]['output'];
+     foreach ($tabs as &$tab) {
+       if (isset($tab['#link']['path']) && $tab['#link']['path'] == 'taxonomy/term/%/edit') {
+-        $tab['#link']['href'] = 'admin/config/media/galleries';
+-        $tab['#link']['title'] = t('Edit all galleries');
++        $tab['#link']['title'] = t('Edit gallery collection');
+       }
+     }
+   }
+@@ -847,8 +848,12 @@ function media_gallery_form_media_gallery_node_form_alter(&$form, &$form_state)
+   $form['media_gallery_media']['#access'] = FALSE;
+   $form['media_gallery_weight']['#access'] = FALSE;
+ 
+-  // Hiding this field because we only support a single collection at the moment.
+-  $form['media_gallery_collection']['#access'] = FALSE;
++  if (variable_get('media_gallery_use_multiple_collections', FALSE)) {
++    $form['media_gallery_collection']['#access'] = TRUE;
++  } else {
++    // Hiding this field because we only support a single collection.
++    $form['media_gallery_collection']['#access'] = FALSE;
++  }
+ 
+   // Wrap a fieldset around the gallery settings.
+   $form['settings_wrapper'] = array(
+@@ -1268,8 +1273,16 @@ function media_gallery_form_taxonomy_form_term_alter(&$form, &$form_state) {
+   $form['settings_wrapper']['gallery']['media_gallery_rows']['#process'][] = 'media_gallery_process_dropdown';
+   $form['settings_wrapper']['gallery']['media_gallery_rows']['#media_gallery_dropdown_options'] = array('1', '3', '5', '10', 'other');
+ 
+-  $form['relations']['#access'] = FALSE;
+-  $form['actions']['delete']['#access'] = FALSE;
++  $multiple_collections = variable_get('media_gallery_use_multiple_collections', FALSE);
++  $form['relations']['#access'] = $multiple_collections;
++  if (isset($form['actions']['delete']['#access'])) {
++    // Use the default permission combined with the settings configuration,
++    // to not bypass access.
++    $form['actions']['delete']['#access'] = $form['actions']['delete']['#access'] && $multiple_collections;
++  }
++  else {
++    $form['actions']['delete']['#access'] = $multiple_collections;
++  }
+   $form['field_license']['#access'] = FALSE;
+ 
+   // Add a submit handler to change the "Updated term" message on submit.
+@@ -1280,6 +1293,9 @@ function media_gallery_form_taxonomy_form_term_alter(&$form, &$form_state) {
+  * Submit handler for the taxonomy_form_term form.
+  */
+ function media_gallery_taxonomy_form_term_submit($form, &$form_state) {
++  if (isset($form_state['confirm_delete'])) {
++    return;
++  }
+   // Change the "Updated term Galleries" message into something that makes
+   // sense in this context.
+   $term_name = $form_state['values']['name'];
+@@ -1298,8 +1314,10 @@ function media_gallery_taxonomy_form_term_submit($form, &$form_state) {
+  * Used to hide the gallery_collections taxonomy admin screens.
+  */
+ function media_gallery_form_taxonomy_overview_vocabularies_alter(&$form, &$form_state) {
+-  $gallery_collection_vid = variable_get('media_gallery_collection_vid');
+-  unset($form[$gallery_collection_vid]);
++  if (!variable_get('media_gallery_use_multiple_collections', FALSE)) {
++    $gallery_collection_vid = variable_get('media_gallery_collection_vid');
++    unset($form[$gallery_collection_vid]);
++  }
+ }
+ 
+ /**
+@@ -1332,21 +1350,6 @@ function media_gallery_module_implements_alter(&$implementations, $hook) {
+ }
+ 
+ /**
+- * Gets the first term in the media_gallery_collection vocabulary
+- */
+-function media_gallery_get_default_gallery_collection() {
+-  $gallery_collection_vid = variable_get('media_gallery_collection_vid');
+-  $tid = db_select('taxonomy_term_data', 'ttd')
+-    ->fields('ttd', array('tid'))
+-    ->condition('vid', $gallery_collection_vid)
+-    ->range(0,1)
+-    ->execute()
+-    ->fetchField();
+-
+-  return taxonomy_term_load($tid);
+-}
+-
+-/**
+  * Access callback for editing parts of a node that are only relevant for media
+  * galleries.
+  */

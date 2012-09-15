@@ -1,0 +1,160 @@
+***************
+*** 37,45 ****
+  function media_gallery_menu() {
+    $items['admin/config/media/galleries'] = array(
+      'title' => 'Gallery settings',
+-     'description' => 'Configure settings for the "All galleries" page.',
+      'access arguments' => array('administer media galleries'),
+-     'page callback' => 'media_gallery_admin_settings',
+      'file' => 'media_gallery.admin.inc',
+    );
+    $items['media-gallery/sort/collection/%taxonomy_term/%'] = array(
+--- 37,47 ----
+  function media_gallery_menu() {
+    $items['admin/config/media/galleries'] = array(
+      'title' => 'Gallery settings',
++     'description' => 'Configure settings for the Media Gallery module.',
++     'page callback' => 'drupal_get_form',
++     'page arguments' => array('media_gallery_admin_settings'),
+      'access arguments' => array('administer media galleries'),
++     'type' => MENU_NORMAL_ITEM,
+      'file' => 'media_gallery.admin.inc',
+    );
+    $items['media-gallery/sort/collection/%taxonomy_term/%'] = array(
+***************
+*** 191,198 ****
+      $tabs = &$data['tabs'][0]['output'];
+      foreach ($tabs as &$tab) {
+        if (isset($tab['#link']['path']) && $tab['#link']['path'] == 'taxonomy/term/%/edit') {
+-         $tab['#link']['href'] = 'admin/config/media/galleries';
+-         $tab['#link']['title'] = t('Edit all galleries');
+        }
+      }
+    }
+--- 193,199 ----
+      $tabs = &$data['tabs'][0]['output'];
+      foreach ($tabs as &$tab) {
+        if (isset($tab['#link']['path']) && $tab['#link']['path'] == 'taxonomy/term/%/edit') {
++         $tab['#link']['title'] = t('Edit gallery collection');
+        }
+      }
+    }
+***************
+*** 847,854 ****
+    $form['media_gallery_media']['#access'] = FALSE;
+    $form['media_gallery_weight']['#access'] = FALSE;
+  
+-   // Hiding this field because we only support a single collection at the moment.
+-   $form['media_gallery_collection']['#access'] = FALSE;
+  
+    // Wrap a fieldset around the gallery settings.
+    $form['settings_wrapper'] = array(
+--- 848,859 ----
+    $form['media_gallery_media']['#access'] = FALSE;
+    $form['media_gallery_weight']['#access'] = FALSE;
+  
++   if (variable_get('media_gallery_use_multiple_collections', FALSE)) {
++     $form['media_gallery_collection']['#access'] = TRUE;
++   } else {
++     // Hiding this field because we only support a single collection.
++     $form['media_gallery_collection']['#access'] = FALSE;
++   }
+  
+    // Wrap a fieldset around the gallery settings.
+    $form['settings_wrapper'] = array(
+***************
+*** 1268,1275 ****
+    $form['settings_wrapper']['gallery']['media_gallery_rows']['#process'][] = 'media_gallery_process_dropdown';
+    $form['settings_wrapper']['gallery']['media_gallery_rows']['#media_gallery_dropdown_options'] = array('1', '3', '5', '10', 'other');
+  
+-   $form['relations']['#access'] = FALSE;
+-   $form['actions']['delete']['#access'] = FALSE;
+    $form['field_license']['#access'] = FALSE;
+  
+    // Add a submit handler to change the "Updated term" message on submit.
+--- 1273,1288 ----
+    $form['settings_wrapper']['gallery']['media_gallery_rows']['#process'][] = 'media_gallery_process_dropdown';
+    $form['settings_wrapper']['gallery']['media_gallery_rows']['#media_gallery_dropdown_options'] = array('1', '3', '5', '10', 'other');
+  
++   $multiple_collections = variable_get('media_gallery_use_multiple_collections', FALSE);
++   $form['relations']['#access'] = $multiple_collections;
++   if (isset($form['actions']['delete']['#access'])) {
++     // Use the default permission combined with the settings configuration,
++     // to not bypass access.
++     $form['actions']['delete']['#access'] = $form['actions']['delete']['#access'] && $multiple_collections;
++   }
++   else {
++     $form['actions']['delete']['#access'] = $multiple_collections;
++   }
+    $form['field_license']['#access'] = FALSE;
+  
+    // Add a submit handler to change the "Updated term" message on submit.
+***************
+*** 1280,1285 ****
+   * Submit handler for the taxonomy_form_term form.
+   */
+  function media_gallery_taxonomy_form_term_submit($form, &$form_state) {
+    // Change the "Updated term Galleries" message into something that makes
+    // sense in this context.
+    $term_name = $form_state['values']['name'];
+--- 1293,1301 ----
+   * Submit handler for the taxonomy_form_term form.
+   */
+  function media_gallery_taxonomy_form_term_submit($form, &$form_state) {
++   if (isset($form_state['confirm_delete'])) {
++     return;
++   }
+    // Change the "Updated term Galleries" message into something that makes
+    // sense in this context.
+    $term_name = $form_state['values']['name'];
+***************
+*** 1298,1305 ****
+   * Used to hide the gallery_collections taxonomy admin screens.
+   */
+  function media_gallery_form_taxonomy_overview_vocabularies_alter(&$form, &$form_state) {
+-   $gallery_collection_vid = variable_get('media_gallery_collection_vid');
+-   unset($form[$gallery_collection_vid]);
+  }
+  
+  /**
+--- 1314,1323 ----
+   * Used to hide the gallery_collections taxonomy admin screens.
+   */
+  function media_gallery_form_taxonomy_overview_vocabularies_alter(&$form, &$form_state) {
++   if (!variable_get('media_gallery_use_multiple_collections', FALSE)) {
++     $gallery_collection_vid = variable_get('media_gallery_collection_vid');
++     unset($form[$gallery_collection_vid]);
++   }
+  }
+  
+  /**
+***************
+*** 1332,1352 ****
+  }
+  
+  /**
+-  * Gets the first term in the media_gallery_collection vocabulary
+-  */
+- function media_gallery_get_default_gallery_collection() {
+-   $gallery_collection_vid = variable_get('media_gallery_collection_vid');
+-   $tid = db_select('taxonomy_term_data', 'ttd')
+-     ->fields('ttd', array('tid'))
+-     ->condition('vid', $gallery_collection_vid)
+-     ->range(0,1)
+-     ->execute()
+-     ->fetchField();
+- 
+-   return taxonomy_term_load($tid);
+- }
+- 
+- /**
+   * Access callback for editing parts of a node that are only relevant for media
+   * galleries.
+   */
+--- 1350,1355 ----
+  }
+  
+  /**
+   * Access callback for editing parts of a node that are only relevant for media
+   * galleries.
+   */

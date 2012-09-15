@@ -1,0 +1,16 @@
+***************
+*** 965,970 ****
+    variable_del('comment_media_gallery');
+    variable_del('media_gallery_collection_vid');
+    variable_del('media_gallery_default_collection_tid');
+  }
+  
+  /**
+--- 965,971 ----
+    variable_del('comment_media_gallery');
+    variable_del('media_gallery_collection_vid');
+    variable_del('media_gallery_default_collection_tid');
++   variable_del('media_gallery_use_multiple_collections');
+  }
+  
+  /**
