@@ -13,3 +13,15 @@
     clear: both;
     display: inline-block;
 }
+
+.views-exposed-form .views-exposed-widget .form-submit {
+    height: 26px;
+    margin-top: 1.6em;
+    width: 60px;
+    font-size: 1em;
+}
+
+.views-exposed-form .views-exposed-widget select {
+    padding: 4px;
+    font-size: 1em;
+}

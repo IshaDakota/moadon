@@ -85,7 +85,47 @@ div#site-name /* The name of the website */ {
 }
 
 .region-header /* Wrapper for any blocks placed in the header region */ {
-  clear: both; /* Clear the logo */
+  float: right; /* Clear the logo */
+}
+
+.region-header ul.menu li {
+  display: inline;
+  padding: 0 10px;
+}
+
+.region-header .form-item, .region-header .item-list, .region-header .form-actions {
+  float: left;
+}
+
+.region-header .item-list {
+  display: none;
+}
+
+.region-header .form-item-name {
+  padding: 0 5px 0 0;
+  }
+
+.region-header .form-item-pass {
+  padding: 0 0 0 5px;
+  }
+  
+.region-header .form-item input#edit-name {
+  width: 90px;
+  height: 20px;
+}
+.region-header .form-item input#edit-pass {
+  width: 80px;
+  height: 20px;
+}
+
+.region-header .form-actions .form-submit {
+  margin: 30px 0 0 8px;
+}
+
+.region-header .form-actions input.form-submit {
+  padding: 5px;
+  height: 35px;
+  width: 50px;
 }
 
 /*
