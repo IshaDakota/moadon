@@ -96,6 +96,31 @@ li a.active {
   color: #ECBA09;
 }
 
+
+
+#block-menu-block-1 .content ul li.menu-mlid-366 a,
+#block-menu-block-1 .content ul li.leaf menu-mlid-366 a:visited {
+  text-decoration: none;
+  text-shadow: 2px 2px 5px #000;
+  color: #FFF;
+  background-color: #b4041e;
+  padding: 5px 6px 4px;
+  border-radius: 5px;
+}
+
+#block-menu-block-1 .content ul li.menu-mlid-366 a:focus,
+#block-menu-block-1 .content ul li.menu-mlid-366 a:hover {
+  text-decoration: none;
+  color: #ECBA09;
+}
+
+#block-menu-block-1 .content ul li.menu-mlid-366 a.active{
+  text-decoration: none;
+  color: #ECBA09;
+}
+
+
+
 #block-menu-block-1 .content ul ul li.leaf,
 #block-menu-block-1 .content ul ul li.collapsed,
 #block-menu-block-1 .content ul ul li.expanded {
