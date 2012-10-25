@@ -187,3 +187,48 @@ h2.block-title /* Block title */ {
   font-size: .7em;
   color: #7A7A7A;
 }
+#block-block-8  ul.menu li,
+#block-block-9  ul.menu li {
+  padding: 0px;
+}
+
+#block-block-8  ul.menu li a,
+#block-block-9  ul.menu li a {
+  text-indent: -9999px;
+  padding: 2px 0;
+  border-radius: 5px;
+  display: inline-block;
+}
+
+#block-block-8  ul.menu li.login a {
+  background: url('../images/white-family-login.png') 0 0 no-repeat;
+  background-color: #2C4062;
+  width: 100px;
+  height: 28px;
+}
+
+#block-block-9  ul.menu li.myaccount a {
+  background: url('../images/white-my-account.png') 0 0 no-repeat;
+  background-color: #2C4062;
+  width: 95px;
+  height: 28px;
+}
+
+#block-block-8  ul.menu li.facebook a,
+#block-block-9  ul.menu li.facebook a {
+  background: #2C4062 url('../images/white-facebook-32.png') 0 0 no-repeat;
+  width: 32px;
+  height: 28px;
+}
+
+#block-block-8  ul.menu li.contact a,
+#block-block-9  ul.menu li.contact a {
+  background: #2C4062 url('../images/white-email-32.png') 0 0 no-repeat;
+  width: 32px;
+  height: 28px;
+}
+
+#block-block-8  ul.menu li a:hover,
+#block-block-9  ul.menu li a:hover {
+background-color: #2c4880;
+}
