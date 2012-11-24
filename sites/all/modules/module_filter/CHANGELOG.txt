@@ -1,3 +1,21 @@
+Module Filter 7.x-2.x, 2012-11-04
+---------------------------------
+by greenSkin: Added filter to user permissions page.
+by greenSkin: Fixed styling when JavaScript is disabled.
+by greenSkin: Fixed compatiblility with page_actions.
+#1351184 klonos, greenSkin: Added support for update_advanced "Ignored from
+  settings".
+#1149978 by good_man, greenSkin: Added RTL Styling for tabs and toggle switch.
+by greenSkin: Hide toggle switch when JavaScript is disabled.
+by greenSkin: Added support for ctools dropbutton as well as views styling for
+  ctools dropbutton.
+by greenSkin: Improved hash validation.
+by greenSkin: Added ability for tabs to be disabled. Direct use case is when
+  the "New" tab contains zero new modules.
+by greenSkin: Added title to "New" tab link that helps to describe the criteria
+  of a "new" module.
+
+
 Module Filter 7.x-2.x, 2012-07-04
 ---------------------------------
 #1320796 by greenSkin: Added some validation checks before trying to select a

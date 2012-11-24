@@ -54,10 +54,21 @@ function theme_module_filter_system_modules($variables) {
  * Theme callback for the modules tabbed form.
  */
 function theme_module_filter_system_modules_tabs($variables) {
+  if (module_exists('views_ui')) {
+    // Hack to get consistent style with views ctools dropbutton.
+    if (module_load_include('inc', 'views_ui', 'includes/admin')) {
+      foreach (views_ui_get_admin_css() as $file => $options) {
+        drupal_add_css($file, $options);
+      }
+    }
+  }
+
   $form = $variables['form'];
 
-  $form['actions']['#prefix'] = '<div id="module-filter-submit">';
-  $form['actions']['#suffix'] = '</div>';
+  if (!module_exists('page_actions')) {
+    $form['actions']['#prefix'] = '<div id="module-filter-submit">';
+    $form['actions']['#suffix'] = '</div>';
+  }
 
   $header = array(
     t('Enabled'),
@@ -118,17 +129,10 @@ function theme_module_filter_system_modules_tabs($variables) {
       if ($module['#required_by']) {
         $description .= '<div class="admin-requirements">' . t('Required by: !module-list', array('!module-list' => implode(', ', $module['#required_by']))) . '</div>';
       }
-      $items = array();
-      foreach (array('help', 'permissions', 'configure') as $link) {
-        $data = drupal_render($module['links'][$link]);
-        if (!empty($data)) {
-          $items[] = array('data' => $data);
-        }
+      $operations = (module_exists('ctools')) ? theme('module_filter_operations', array('links' => $module['links'], 'dropbutton' => TRUE)) : theme('module_filter_operations', array('links' => $module['links']));
+      if (!empty($operations)) {
+        $description .= $operations;
       }
-      if (!empty($items)) {
-        $description .= '<div class="admin-operations">' . theme('item_list', array('items' => $items, 'attributes' => array('class' => array('links', 'inline')))) . '</div>';
-      }
-      $description .= drupal_render($module['links']);
       $row[] = array('data' => $description, 'class' => array('description'));
 
       $class = array(module_filter_get_id($package) . '-tab', 'module', $stripe);
@@ -170,4 +174,34 @@ function theme_module_filter_system_modules_tabs($variables) {
   $output .= '</div>';
   $output .= '</div>';
   return $output;
+}
+
+function theme_module_filter_operations(&$vars) {
+  $links = &$vars['links'];
+  $dropbutton = $vars['dropbutton'];
+
+  $operations = array();
+  foreach (array('configure', 'permissions', 'help') as $key) {
+    if ($dropbutton) {
+      hide($links[$key]);
+      if (!empty($links[$key]['#href'])) {
+        $operations[] = array(
+          'title' => $links[$key]['#title'],
+          'href' => $links[$key]['#href'],
+        );
+      }
+    }
+    else {
+      $data = drupal_render($links[$key]);
+      if (!empty($data)) {
+        $operations[] = array('data' => $data);
+      }
+    }
+  }
+  if (!empty($operations)) {
+    if ($dropbutton) {
+      return '<div class="admin-operations">' . theme('links__ctools_dropbutton', array('title' => t('Operations'), 'links' => $operations, 'attributes' => array('class' => array('links')))) . '</div>';
+    }
+    return '<div class="admin-operations">' . theme('item_list', array('items' => $operations, 'attributes' => array('class' => array('links', 'inline')))) . '</div>';
+  }
 }

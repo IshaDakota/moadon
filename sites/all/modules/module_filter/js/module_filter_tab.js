@@ -23,12 +23,21 @@ Drupal.behaviors.moduleFilterTabs = {
           var id = Drupal.settings.moduleFilter.packageIDs[i];
 
           var name = id;
+          var tabClass = 'project-tab';
+          var title = null;
+          var summary = (Drupal.settings.moduleFilter.countEnabled) ? '<span class="count">' + Drupal.ModuleFilter.countSummary(id) + '</span>' : '';
+
           switch (id) {
             case 'all':
               name = Drupal.t('All');
               break;
             case 'new':
               name = Drupal.t('New');
+              title = Drupal.t('Modules installed within the last week.');
+              if (Drupal.settings.moduleFilter.enabledCounts['new'].total == 0) {
+                tabClass += ' disabled';
+                summary += '<span>' + Drupal.t('No modules added within the last week.') + '</span>';
+              }
               break;
             default: 
               var $row = $('#' + id + '-package');
@@ -37,8 +46,7 @@ Drupal.behaviors.moduleFilterTabs = {
               break;
           }
 
-          var summary = (Drupal.settings.moduleFilter.countEnabled) ? '<span class="count">' + Drupal.ModuleFilter.countSummary(id) + '</span>' : '';
-          tabs += '<li id="' + id + '-tab" class="project-tab"><a href="#' + id + '" class="overlay-exclude"><strong>' + name + '</strong><span class="summary">' + summary + '</span></a></li>';
+          tabs += '<li id="' + id + '-tab" class="' + tabClass + '"><a href="#' + id + '" class="overlay-exclude"' + (title ? ' title="' + title + '"' : '') + '><strong>' + name + '</strong><span class="summary">' + summary + '</span></a></li>';
         }
         tabs += '</ul>';
         $('#module-filter-modules').before(tabs);
@@ -188,8 +196,6 @@ Drupal.behaviors.moduleFilterTabs = {
             });
           });
         }
-
-        $('#module-filter-modules').css({ 'margin-left': '240px', 'border': '1px solid #ccc' });
       });
     }
   }
@@ -227,21 +233,19 @@ Drupal.ModuleFilter.Tab = function(element, id) {
 };
 
 Drupal.ModuleFilter.selectTab = function(hash) {
-  if (!hash) {
+  if (!hash || Drupal.ModuleFilter.tabs[hash + '-tab'] == undefined || Drupal.settings.moduleFilter.enabledCounts[hash].total == 0) {
     hash = 'all';
   }
 
-  if (Drupal.ModuleFilter.tabs[hash + '-tab']) {
-    if (Drupal.ModuleFilter.activeTab != undefined) {
-      Drupal.ModuleFilter.activeTab.element.removeClass('selected');
-    }
-
-    Drupal.ModuleFilter.activeTab = Drupal.ModuleFilter.tabs[hash + '-tab'];
-    Drupal.ModuleFilter.activeTab.element.addClass('selected');
-
-    var moduleFilter = $('input[name="module_filter[name]"]').data('moduleFilter');
-    moduleFilter.applyFilter();
+  if (Drupal.ModuleFilter.activeTab != undefined) {
+    Drupal.ModuleFilter.activeTab.element.removeClass('selected');
   }
+
+  Drupal.ModuleFilter.activeTab = Drupal.ModuleFilter.tabs[hash + '-tab'];
+  Drupal.ModuleFilter.activeTab.element.addClass('selected');
+
+  var moduleFilter = $('input[name="module_filter[name]"]').data('moduleFilter');
+  moduleFilter.applyFilter();
 };
 
 Drupal.ModuleFilter.eventHandlerOperateByURLFragment = function(event) {
